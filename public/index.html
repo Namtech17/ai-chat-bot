@@ -131,17 +131,12 @@
 
             React.useEffect(() => {
                 const modeToggle = document.getElementById('mode-toggle');
-                modeToggle.addEventListener('click', toggleDarkMode);
-                return () => modeToggle.removeEventListener('click', toggleDarkMode);
+                modeToggle.addEventListener('click', () => setDarkMode(!darkMode));
+                return () => modeToggle.removeEventListener('click', () => setDarkMode(!darkMode));
             }, []);
 
             const scrollToBottom = () => {
                 messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            };
-
-            const toggleDarkMode = () => {
-                setDarkMode(!darkMode);
-                document.body.classList.toggle('dark-mode');
             };
 
             const sendMessage = async () => {
@@ -209,8 +204,8 @@
                     </div>
                     <div className="footer">
                         Developed by Naman<br />
-                        <a href="https://www.linkedin.com/in/vinay-kumar-yadav-49571a28b/" 
-                           target="_blank" 
+                        <a href="https://www.linkedin.com/in/vinay-kumar-yadav-49571a28b/"
+                           target="_blank"
                            style={{color: '#ff66cc'}}>
                             LinkedIn
                         </a>
@@ -234,6 +229,6 @@
         const root = ReactDOM.createRoot(document.getElementById('chat-container'));
         root.render(<ChatApp />);
         typeWriter();
-    </ script>
+    </script>
 </body>
 </html>
