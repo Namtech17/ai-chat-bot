@@ -1,190 +1,201 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chat Assistant</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>AI Chat Application</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://raw.githubusercontent.com/Namtech17/ai-chat-bot/refs/heads/main/wallpaperflare.com_wallpaper%20(1).jpg');
+            background-position: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            animation: gradientShift 10s infinite alternate;
             transition: background-color 0.3s;
         }
+
+        @keyframes gradientShift {
+            0% { background-color: rgba(20, 20, 20, 0.9); }
+            100% { background-color: rgba(60, 60, 60, 0.8); }
+        }
+
         #chat-container {
-            width: 400px;
-            height: 600px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            transition: background-color 0.3s;
+            max-width: 700px;
+            margin: 60px auto;
+            background: rgba(35, 35, 35, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.8);
+            position: relative;
         }
-        .header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        .message {
-            margin-bottom: 10px;
-            padding: 8px;
-            border-radius: 5px;
-            max-width: 70%;
-        }
-        .user {
-            background-color: #007bff;
-            color: white;
-            align-self: flex-end;
-            margin-left: auto;
-        }
-        .assistant {
-            background-color: #f1f0f0;
-            color: black;
-            align-self: flex-start;
-        }
-        .input-group {
-            display: flex;
-            padding: 10px;
-        }
-        #user-input {
-            flex-grow: 1;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 3px;
-        }
-        #send-button {
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 3px;
-            margin-left: 5px;
-            cursor: pointer;
-        }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 10px;
-            text-align: center;
-            font-size: 12px;
-        }
-        .dark-mode {
-            background-color: #333;
-            color: white;
-        }
-        .dark-mode #chat-container {
-            background-color: #444;
-            color: white;
-        }
-        .dark-mode .assistant {
-            background-color: #555;
-            color: white;
-        }
-        .dark-mode .footer {
-            background-color: #222;
-            color: white;
-        }
-        #mode-toggle {
+
+        .toggle-button {
             position: absolute;
             top: 10px;
-            right: 10px;
-            padding: 5px 10px;
-            background-color: #007bff;
-            color: white;
+            right: 20px;
+            font-size: 1.5rem;
+            background: transparent;
             border: none;
-            border-radius: 3px;
             cursor: pointer;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: lightblue;
+            overflow: hidden;
+        }
+
+        #chat-box {
+            max-height: 450px;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .user {
+            text-align: right;
+            background: rgba(100, 149, 237, 0.3);
+            color: black;
+        }
+
+        .ai {
+            text-align: left;
+            background: rgba(255, 140, 0, 0.3);
+            color: black;
+        }
+
+        #user-input {
+            width: calc(100% - 80px);
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid #4682B4;
+        }
+
+        #send-button {
+            border-radius: 5px;
+            background-color: #4682B4;
+            color: white;
+        }
+
+        #send-button:hover {
+            background-color: #5a9bcf;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.85rem;
+            color: lightblue;
+        }
+
+        .light-mode {
+            background-color: #f2f2f2;
+            color: black;
+        }
+
+        .light-mode #chat-container {
+            background: rgba(250, 250, 250, 0.9);
+        }
+
+        .dark-mode {
+            background-color: #282828;
+            color: lightblue;
         }
     </style>
 </head>
-<body>
-    <div id="chat-container"></div>
-    <button id="mode-toggle">Toggle Dark Mode</button>
+<body class="dark-mode">
+    <div id="chat-container" class="container">
+        <button id="toggle-button" class="toggle-button" onClick="toggleMode()">🌙</button>
+        <h1 id="typing-effect"></h1>
+        <div id="chat-box" class="mb-3"></div>
+        <div class="input-group">
+            <input type="text" id="user-input" class="form-control" placeholder="Type your message here...">
+            <div class="input-group-append">
+                <button id="send-button" class="btn" onClick="sendMessage()">Send</button>
+            </div>
+        </div>
+        <div class="footer">
+          Developed by Naman<br />
+          <a href="https://www.linkedin.com/in/naman-profile/" target="_blank" style="color:#4682B4;">LinkedIn</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <script type="text/babel">
         function ChatApp() {
             const [messages, setMessages] = React.useState([]);
-            const [userInput, setUserInput] = React.useState('');
-            const [darkMode, setDarkMode] = React.useState(false);
-            const messagesEndRef = React.useRef(null);
-
-            React.useEffect(() => {
-                scrollToBottom();
-            }, [messages]);
-
-            React.useEffect(() => {
-                const modeToggle = document.getElementById('mode-toggle');
-                modeToggle.addEventListener('click', () => setDarkMode(!darkMode));
-                return () => modeToggle.removeEventListener('click', () => setDarkMode(!darkMode));
-            }, []);
-
-            const scrollToBottom = () => {
-                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-            };
+            const [userInput, setUserInput] = React.useState("");
+            const [isDarkMode, setIsDarkMode] = React.useState(true);
 
             const sendMessage = async () => {
-                if (userInput.trim() === '') return;
+                if (!userInput.trim()) return;
 
-                const newMessages = [...messages, { text: userInput, sender: 'user' }];
-                setMessages(newMessages);
-                setUserInput('');
+                const userMessage = { sender: 'user', text: userInput.trim() };
+                setMessages([...messages, userMessage]);
 
                 try {
                     const response = await fetch('/api/chat', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
+                        headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ message: userInput }),
                     });
-
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-
                     const data = await response.json();
-                    setMessages([...newMessages, { text: data.response, sender: 'assistant' }]);
+                    const aiMessage = { sender: 'ai', text: data.reply || 'AI could not provide a response.' };
+                    setMessages((prevMessages) => [...prevMessages, aiMessage]);
                 } catch (error) {
                     console.error('Error:', error);
-                    setMessages([...newMessages, { text: "Sorry, I couldn't process your request.", sender: 'assistant' }]);
+                    setMessages((prevMessages) => [
+                        ...prevMessages,
+                        { sender: 'ai', text: 'AI could not respond.' },
+                    ]);
                 }
+
+                setUserInput("");
+                document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
             };
 
             const handleEnterPress = (e) => {
-                if (e.key === 'Enter') {
-                    sendMessage();
-                }
+                if (e.key === 'Enter') sendMessage();
+            };
+
+            const toggleMode = () => {
+                setIsDarkMode(!isDarkMode);
+                document.body.classList.toggle("light-mode", !isDarkMode);
+                document.body.classList.toggle("dark-mode", isDarkMode);
+                document.getElementById("toggle-button").innerText = isDarkMode ? "🌙" : "☀️";
             };
 
             return (
-                <div id="chat-container" className={darkMode ? 'dark-mode' : ''}>
-                    <div className="header">
-                        <span id="typing-effect"></span>
-                    </div>
-                    <div className="messages">
+                <div id="chat-container" className={`container ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
+                    <button id="toggle-button" className="toggle-button" onClick={toggleMode}>
+                        {isDarkMode ? "🌙" : "☀️"}
+                    </button>
+                    <h1 id="typing-effect"></h1>
+                    <div id="chat-box" className="mb-3">
                         {messages.map((msg, index) => (
                             <div key={index} className={`message ${msg.sender}`}>
-                                {msg.text}
+                                {msg.sender === 'user' ? 'You:' : 'AI:'} {msg.text}
                             </div>
                         ))}
-                        <div ref={messagesEndRef} />
                     </div>
                     <div className="input-group">
                         <input
@@ -197,38 +208,47 @@
                             onKeyPress={handleEnterPress}
                         />
                         <div className="input-group-append">
-                            <button id="send-button" className="btn" onClick={sendMessage}>
-                                Send
-                            </button>
+                            <button id="send-button" className="btn" onClick={sendMessage}>Send</button>
                         </div>
                     </div>
-                    <div className="footer">
-                        Developed by Naman<br />
-                        <a href="https://www.linkedin.com/in/vinay-kumar-yadav-49571a28b/"
-                           target="_blank"
-                           style={{color: '#ff66cc'}}>
-                            LinkedIn
-                        </a>
-                    </div>
+                    
                 </div>
             );
         }
 
-        // Typing effect for the header
-        const text = "AI Chat Assistant";
-        let i = 0;
-        function typeWriter() {
-            if (i < text.length) {
-                document.getElementById("typing-effect").innerHTML += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        }
+        ReactDOM.render(<ChatApp />, document.getElementById('chat-container'));
 
-        // Render React component and start typing effect
-        const root = ReactDOM.createRoot(document.getElementById('chat-container'));
-        root.render(<ChatApp />);
-        typeWriter();
+        const typingEffect = (text) => {
+            let index = 0;
+            let direction = true;
+            const pauseDuration = 1000;
+            const element = document.getElementById("typing-effect");
+
+            const type = () => {
+                if (direction) {
+                    element.innerText += text[index++];
+                    if (index === text.length) {
+                        direction = false;
+                        setTimeout(type, pauseDuration);
+                    } else {
+                        setTimeout(type, 100);
+                    }
+                } else {
+                    element.innerText = element.innerText.slice(0, -1);
+                    if (element.innerText.length === 0) {
+                        direction = true;
+                        index = 0;
+                        setTimeout(() => type(), pauseDuration);
+                    } else {
+                        setTimeout(type, 100);
+                    }
+                }
+            };
+
+            type();
+        };
+
+        typingEffect("Welcome to Chatbot AI");
     </script>
 </body>
 </html>
